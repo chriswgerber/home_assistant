@@ -1,0 +1,19 @@
+---
+
+- name: Add SNMP Templates
+  ansible.builtin.template:
+    src: sensors/snmp.yml
+    dest: "{{ hass_templates_path }}/snmp.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh templates.yaml
+
+- name: Add SNMP Sensor
+  ansible.builtin.template:
+    src: sensors/platform-snmp.yml
+    dest: "{{ hass_sensors_path }}/snmp.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh sensors.yaml

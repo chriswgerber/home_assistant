@@ -1,0 +1,22 @@
+---
+
+- when: hass_xcel_key_data == ""
+  block:
+    - name: Generate a private key, if not provided.
+      community.crypto.openssl_privatekey:
+        path: "{{ xcel_meter_ssl.key }}"
+        type: ECC
+        curve: prime256v1
+      register: xcel_cert_key_file
+
+- when: hass_xcel_key_data != ""
+  block:
+    - name: Write key data to host
+      ansible.builtin.copy:
+        content: "{{ hass_xcel_key_data }}"
+        dest: "{{ xcel_meter_ssl.key }}"
+        owner: root
+        group: root
+        mode: '0644'
+      become: true
+      register: xcel_cert_key_file

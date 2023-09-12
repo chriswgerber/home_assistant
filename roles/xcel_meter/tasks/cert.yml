@@ -1,0 +1,43 @@
+---
+
+- when: hass_xcel_cert_data == ""
+  block:
+    - name: Create CSR request from template
+      ansible.builtin.template:
+        src: signing-request.ini.j2
+        dest: "{{ hass_certs_dir ~ '/xcel-meter.csr.conf' }}"
+        owner: root
+        group: root
+        mode: '0644'
+      become: true
+      register: xcel_cert_csr_conf
+
+    - name: Create CSR
+      ansible.builtin.command: >-
+        openssl req -nodes
+        -key "{{ xcel_meter_ssl.key }}"
+        -config "{{ xcel_cert_csr_conf.dest }}"
+        -out "{{ xcel_meter_ssl.cert ~ '.csr' }}"
+      args:
+        creates: "{{ xcel_meter_ssl.cert ~ '.csr' }}"
+      when: (xcel_cert_csr_conf.changed | bool) or (xcel_cert_key_file.changed | bool)
+      register: xcel_cert_csr
+
+    - name: Generate certificate.
+      community.crypto.x509_certificate:
+        path: "{{ xcel_meter_ssl.cert }}"
+        privatekey_path: "{{ xcel_meter_ssl.key }}"
+        csr_path: "{{ xcel_meter_ssl.cert ~ '.csr' }}"
+        provider: selfsigned
+      when: (xcel_cert_csr.changed | bool) or (xcel_cert_key_file.changed | bool)
+
+- when: hass_xcel_cert_data != ""
+  block:
+    - name: Write cert data to host
+      ansible.builtin.copy:
+        content: "{{ hass_xcel_cert_data }}"
+        dest: "{{ xcel_meter_ssl.cert }}"
+        owner: root
+        group: root
+        mode: '0644'
+      become: true

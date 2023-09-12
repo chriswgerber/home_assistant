@@ -1,0 +1,14 @@
+{{ ansible_managed | comment }}
+
+- alias: Match Office to Outside Color Temp
+  id: '1693241440567'
+  description: >
+    Adjust the color temperature of the light in the office with the rising and setting
+    of the sun.
+  use_blueprint:
+    path: {{ hass_blueprints.sun_color_match.gist_org ~ '/' ~ hass_blueprints.sun_color_match.gist_file }}
+    input:
+      max_color_temp: 2300
+      min_color_temp: 4500
+      target_lights:
+        - {{ hass_blueprints.sun_color_match.target_light }}

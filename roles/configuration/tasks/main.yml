@@ -1,0 +1,43 @@
+---
+
+- name: Create config dirs
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  loop:
+    - "{{ hass_a8n_config_path }}"
+    - "{{ hass_cameras_path }}"
+    - "{{ hass_trackers_path }}"
+    - "{{ hass_restful_path }}"
+    - "{{ hass_scenes_path }}"
+    - "{{ hass_sensors_path }}"
+    - "{{ hass_templates_path }}"
+
+- name: Create configuration.yaml
+  ansible.builtin.template:
+    src: configuration.yaml.j2
+    dest: "{{ hass_config_filename }}"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart home assistant
+
+# Merges every variable (list variable) that begins with 'hass_secrets_data_' and adds
+# them to the home assistant secrets file.
+- name: Update _hass_secrets_all list
+  ansible.builtin.set_fact:
+    _hass_secrets_all: "{{ _hass_secrets_all + lookup('ansible.builtin.vars', item) }}"
+  loop: "{{ lookup('ansible.builtin.varnames', '^hass_secrets_data_.+', wantlist=true) }}"
+
+- name: Add secrets to Home Assistant
+  ansible.builtin.template:
+    src: secrets.yaml.j2
+    dest: "{{ hass_secrets_filename }}"
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  notify: restart home assistant

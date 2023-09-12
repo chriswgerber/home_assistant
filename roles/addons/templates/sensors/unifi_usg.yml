@@ -1,0 +1,45 @@
+{{ ansible_managed | comment }}
+
+- sensor:
+  - unique_id: unifi_usg_cpu_percent
+    name: USG CPU percentage
+    icon: mdi:cpu-64-bit
+    state_class: measurement
+    unit_of_measurement: '%'
+    state: >-
+      {{ '{%' }} set ent_id = '{{ hass_gateway_sensor_entity }}' {{ '%}' }}
+      {% raw -%}
+      {% set cur_state = state_attr(ent_id, 'gw_system-stats') -%}
+      {% if cur_state is not none -%}
+        {{ cur_state.cpu | int }}
+      {% endif %}
+      {%- endraw %}
+
+  - unique_id: unifi_usg_mem_percent
+    name: USG Memory percentage
+    icon: mdi:memory
+    state_class: measurement
+    unit_of_measurement: '%'
+    state: >-
+      {{ '{%' }} set ent_id = '{{ hass_gateway_sensor_entity }}' {{ '%}' }}
+      {% raw -%}
+      {% set cur_state = state_attr(ent_id, 'gw_system-stats') -%}
+      {% if cur_state is not none -%}
+        {{ cur_state.mem | int }}
+      {% endif %}
+      {%- endraw %}
+
+  - unique_id: unifi_usg_uptime
+    name: USG Uptime
+    icon: mdi:timer-outline
+    state_class: total_increasing
+    device_class: duration
+    unit_of_measurement: s
+    state: >-
+      {{ '{%' }} set ent_id = '{{ hass_gateway_sensor_entity }}' {{ '%}' }}
+      {% raw -%}
+      {% set cur_state = state_attr(ent_id, 'gw_system-stats') -%}
+      {% if cur_state is not none -%}
+        {{ cur_state.uptime | int }}
+      {% endif %}
+      {%- endraw %}

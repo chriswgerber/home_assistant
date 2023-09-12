@@ -1,0 +1,16 @@
+---
+dependencies:
+  - role: chriswgerber.home_assistant.configuration
+
+galaxy_info:
+  author: chriswgerber
+  description: Additional Configurations for Home Assistant
+  min_ansible_version: "2.4"
+  license: ""
+  platforms:
+  - name: Debian
+    versions:
+    - all
+  - name: Ubuntu
+    versions:
+    - all

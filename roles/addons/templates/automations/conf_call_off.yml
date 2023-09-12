@@ -1,0 +1,21 @@
+{{ ansible_managed | comment }}
+
+- alias: When Conference Call Off
+  id: '1693287744585'
+  mode: single
+  description: Run automation when Conference Call Scene is toggled off.
+  trigger:
+    - platform: state
+      entity_id:
+        - input_boolean.conference_call_scene
+      to: 'off'
+  condition: []
+  action:
+    - service: automation.turn_on
+      data: {}
+      target:
+        entity_id: automation.match_office_to_outside_color_temp
+    - service: scene.turn_on
+      target:
+        entity_id: scene.conference_call_off
+      metadata: {}

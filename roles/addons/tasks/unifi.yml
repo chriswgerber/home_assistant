@@ -1,0 +1,28 @@
+---
+
+- name: Add Unifi Gateway Sensor
+  ansible.builtin.template:
+    src: sensors/unifi-gateway.yml
+    dest: "{{ hass_sensors_path }}/unifi-gateway.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh sensors.yaml
+
+- name: Add Unifi WAN Sensor
+  ansible.builtin.template:
+    src: sensors/unifi_wan.yml
+    dest: "{{ hass_templates_path }}/unifi_wan.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh templates.yaml
+
+- name: Add Unifi USG Sensor
+  ansible.builtin.template:
+    src: sensors/unifi_usg.yml
+    dest: "{{ hass_templates_path }}/unifi_usg.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh templates.yaml

@@ -1,0 +1,16 @@
+{{ ansible_managed | comment }}
+
+- platform: unifigateway
+  host: {{ unifi_controller_ip }}
+  port: 443
+  verify_ssl: false
+  version: UDMP-unifiOS
+  username: !secret unifi_gateway_user
+  password: !secret unifi_gateway_pass
+  monitored_conditions:
+    - www
+    - wan
+    - wlan
+    - lan
+    - firmware
+    # - alerts

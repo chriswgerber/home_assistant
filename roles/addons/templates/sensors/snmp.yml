@@ -1,0 +1,13 @@
+{{ ansible_managed | comment }}
+
+- sensor:
+  - unique_id: unifi_usg_last_restart
+    name: USG Last Restart
+    device_class: timestamp
+    state: >
+      {{ '{%' }} set last_restart_sec = (states('{{ hass_usg_gateway_entity  }}') | int) {{ '-%}' }}
+      {% raw -%}
+      {% if last_restart_sec is not none -%}
+        {{ now() - timedelta(seconds=last_restart_sec) }}
+      {% endif %}
+      {%- endraw %}

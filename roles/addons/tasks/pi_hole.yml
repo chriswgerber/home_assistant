@@ -1,0 +1,10 @@
+---
+
+- name: Add EnsurePiholeEnabled automation
+  ansible.builtin.template:
+    src: automations/enable_pihole.yml
+    dest: "{{ hass_a8n_config_path }}/enable_pihole.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh automation.yaml

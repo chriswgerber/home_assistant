@@ -1,0 +1,69 @@
+---
+
+- name: Create Xcel certs dir
+  ansible.builtin.file:
+    path: "{{ hass_certs_dir }}"
+    state: directory
+    recurse: true
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Setup SSL Key
+  ansible.builtin.import_tasks:
+    file: key.yml
+
+- name: Setup SSL Cert
+  ansible.builtin.import_tasks:
+    file: cert.yml
+
+- name: Get Certificate Info
+  community.crypto.x509_certificate_info:
+    path: "{{ xcel_meter_ssl.cert }}"
+  register: hass_xcel_cert_info
+  when: hass_xcel_print_lfdi | bool
+
+- name: Print out LFDI for certificate
+  ansible.builtin.debug:
+    msg: >
+      Certificate LDFI: {{ hass_xcel_cert_info.fingerprints['sha256'] | replace(':', '') | truncate(40, True, '') }}
+  when: hass_xcel_print_lfdi | bool
+
+- name: Copy OpensslConf for Xcel meter to host
+  ansible.builtin.copy:
+    src: xcel-meter-ssl.conf
+    dest: "{{ xcel_meter_ssl.conf }}"
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+
+- name: Add Xcel Rate Automation
+  ansible.builtin.template:
+    src: xcel_usd_kwh.yml
+    dest: "{{ hass_templates_path }}/xcel_usd_kwh.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh templates.yaml
+  become: true
+
+- name: Set Energy Tariff Price
+  ansible.builtin.template:
+    src: set_energy_tariff.yml
+    dest: "{{ hass_a8n_config_path }}/set_energy_tariff.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh automation.yaml
+  become: true
+
+- name: Add Xcel Meter sensors
+  ansible.builtin.template:
+    src: xcel-meter.yml
+    dest: "{{ hass_sensors_path }}/xcel-meter.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh sensors.yaml
+  become: true

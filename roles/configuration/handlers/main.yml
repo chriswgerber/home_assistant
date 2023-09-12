@@ -1,0 +1,114 @@
+---
+
+- name: Re-assemble automation.yaml from dir
+  ansible.builtin.assemble:
+    src: "{{ hass_a8n_config_path }}"
+    dest: "{{ hass_a8n_config_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+  become: true
+  notify: restart home assistant
+  listen: refresh automation.yaml
+
+- name: Re-assemble cameras.yaml from dir
+  ansible.builtin.assemble:
+    src: "{{ hass_cameras_path }}"
+    dest: "{{ hass_cameras_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+  become: true
+  notify: restart home assistant
+  listen: refresh cameras.yaml
+
+- name: Re-assemble device_trackers.yml from dir
+  ansible.builtin.assemble:
+    src: "{{ hass_trackers_path }}"
+    dest: "{{ hass_trackers_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+  become: true
+  listen: refresh device_trackers.yaml
+  notify: restart home assistant
+
+- name: Re-assemble restful.yaml from dir
+  ansible.builtin.assemble:
+    src: "{{ hass_restful_path }}"
+    dest: "{{ hass_restful_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+  become: true
+  listen: refresh restful.yaml
+  notify: restart home assistant
+
+- name: Re-assemble scenes.yaml from dir
+  ansible.builtin.assemble:
+    src: "{{ hass_scenes_path }}"
+    dest: "{{ hass_scenes_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+  become: true
+  listen: refresh scenes.yaml
+  notify: restart home assistant
+
+- name: Re-assemble sensors.yml from dir
+  ansible.builtin.assemble:
+    src: "{{ hass_sensors_path }}"
+    dest: "{{ hass_sensors_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+  become: true
+  listen: refresh sensors.yaml
+  notify: restart home assistant
+
+- name: Re-assemble templates.yml from dir
+  ansible.builtin.assemble:
+    src: "{{ hass_templates_path }}"
+    dest: "{{ hass_templates_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+  become: true
+  listen: refresh templates.yaml
+  notify: restart home assistant
+
+- name: Check if Config is valid
+  ansible.builtin.shell: >
+    source /etc/profile.d/homeassistant.sh && ha core check
+  args:
+    executable: /bin/zsh
+  register: hass_config_state
+  listen: restart home assistant
+
+- when: hass_config_state.rc == 0 | bool
+  block:
+
+    - name: Reload HASS Configuration
+      ansible.builtin.uri:
+        url: http://home.chriswgerber.com:8123/api/services/homeassistant/reload_all
+        method: POST
+        body: "{}"
+        force: true
+        headers:
+          Authorization: Bearer {{ hass_cli_key }}
+        body_format: json
+      listen: perform hass reload
+
+    - name: Restart Home Assistant Core
+      ansible.builtin.shell: >
+        source /etc/profile.d/homeassistant.sh && ha core restart
+      args:
+        executable: /bin/zsh
+      listen: restart home assistant

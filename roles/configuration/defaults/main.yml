@@ -1,0 +1,66 @@
+---
+
+# Configuration File
+hass_config_dir: /config
+hass_config_filename: "{{ hass_config_dir  }}/configuration.yaml"
+
+# Blueprints
+hass_blueprints_dir: blueprints
+hass_blueprints_path: "{{ hass_config_dir ~ '/' ~ hass_blueprints_dir }}"
+
+# Automations
+hass_a8n_config_name: automations
+hass_a8n_config_path: "{{ hass_config_dir ~ '/' ~ hass_a8n_config_name }}"
+hass_a8n_config_file: "{{ hass_a8n_config_path }}.yaml"
+
+# Cameras
+hass_cameras_name: cameras
+hass_cameras_path: "{{ hass_config_dir ~ '/' ~ hass_cameras_name }}"
+hass_cameras_file: "{{ hass_cameras_path }}.yaml"
+
+# Restful Sensors
+hass_restful_name: rest
+hass_restful_path: "{{ hass_config_dir ~ '/' ~ hass_restful_name }}"
+hass_restful_file: "{{ hass_restful_path }}.yaml"
+
+# Scenes
+hass_scenes_name: scenes
+hass_scenes_path: "{{ hass_config_dir ~ '/' ~ hass_scenes_name }}"
+hass_scenes_file: "{{ hass_scenes_path }}.yaml"
+
+# Sensors
+hass_sensors_dirname: sensors
+hass_sensors_path: "{{ hass_config_dir ~ '/' ~ hass_sensors_dirname }}"
+hass_sensors_file: "{{ hass_sensors_path }}.yaml"
+
+# Templates
+hass_templates_dirname: templates
+hass_templates_path: "{{ hass_config_dir ~ '/' ~ hass_templates_dirname }}"
+hass_templates_file: "{{ hass_templates_path }}.yaml"
+
+# Device Trackers
+hass_trackers_dirname: device_trackers
+hass_trackers_path: "{{ hass_config_dir ~ '/' ~ hass_trackers_dirname }}"
+hass_trackers_file: "{{ hass_trackers_path }}.yaml"
+
+# Scripts
+hass_scripts_filename: "scripts.yaml"
+hass_scripts_path: "{{ hass_config_dir ~ '/' ~ hass_scripts_filename}}"
+
+# Secrets
+hass_secrets_filename: "{{ hass_config_dir }}/secrets.yaml"
+
+# Themes
+hass_themes_dirname: themes
+
+# Extra Certificates directory
+hass_certs_dir: "{{ hass_config_dir }}/certs"
+
+# Don't use
+_hass_secrets_all: []
+
+hass_secrets_data_base:
+  # Example - Use vault for security
+  - key: some_password
+    value: welcome
+    comment: https://www.home-assistant.io/docs/configuration/secrets/

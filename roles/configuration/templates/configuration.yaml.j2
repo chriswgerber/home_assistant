@@ -1,0 +1,27 @@
+{{ ansible_managed | comment }}
+
+---
+default_config:
+
+frontend:
+  themes: !include_dir_merge_named {{ hass_themes_dirname }}
+
+automation: !include {{ hass_a8n_config_file }}
+
+camera: !include {{ hass_cameras_file }}
+
+device_tracker: !include {{ hass_trackers_file }}
+
+rest: !include {{ hass_restful_file }}
+
+scene: !include {{ hass_scenes_file }}
+
+script: !include_dir_merge_named {{ hass_scripts_path }}
+
+sensor: !include {{ hass_sensors_file }}
+
+template: !include {{ hass_templates_file }}
+
+###
+# Other
+ffmpeg:

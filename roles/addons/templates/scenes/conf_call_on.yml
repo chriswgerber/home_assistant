@@ -1,0 +1,32 @@
+{{ ansible_managed | comment }}
+
+- name: Conference Call On
+  id: '1693286765908'
+  entities:
+    light.office_light:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 5000
+      min_mireds: 200
+      max_mireds: 500
+      supported_color_modes:
+        - brightness
+        - color_temp
+        - rgb
+      friendly_name: Office Light
+      supported_features: 0
+      color_mode: color_temp
+      brightness: 128
+      color_temp_kelvin: 4500
+      color_temp: 200
+      hs_color:
+        - 27.001
+        - 19.243
+      rgb_color:
+        - 255
+        - 228
+        - 205
+      xy_color:
+        - 0.372
+        - 0.35
+      state: 'on'
+  metadata: {}

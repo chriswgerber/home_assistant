@@ -1,0 +1,11 @@
+
+- id: '1693501372190'
+  alias: Ipad leaves Elk River
+  description: >
+    Receive a notification on device every time the iPad leaves Elk River.
+  use_blueprint:
+    path: homeassistant/notify_leaving_zone.yaml
+    input:
+      person_entity: person.annastasiya
+      zone_entity: zone.elk_river
+      notify_device: 33b38246480b1e058d64152a366b3b2d

@@ -1,0 +1,45 @@
+{{ ansible_managed | comment }}
+
+- sensor:
+  - unique_id: unifi_wan_current_ip
+    name: WAN Current IP
+    state: >
+      {{ '{{' }} state_attr('{{ hass_gateway_sensor_entity }}', 'wan_ip') {{ '}}' }}
+
+  - unique_id: unifi_wan_download_rate
+    name: WAN Current Download Rate
+    state_class: measurement
+    device_class: data_rate
+    unit_of_measurement: B/s
+    state: >-
+      {{ '{%' }} set sensor_id = '{{ hass_gateway_sensor_entity }}' {{ '%}' }}
+      {% raw -%}
+      {% set key_name = 'rx_bytes-r' %}
+      {% if states(sensor_id) %}
+        {% set val = state_attr(sensor_id, key_name) %}
+        {% if val is not none %}
+          {{ val | int }}
+        {% else %}
+          {{ val }}
+        {% endif %}
+      {% endif %}
+      {%- endraw %}
+
+  - unique_id: unifi_wan_upload_rate
+    name: WAN Current Upload Rate
+    state_class: measurement
+    device_class: data_rate
+    unit_of_measurement: B/s
+    state: >-
+      {{ '{%' }} set sensor_id = '{{ hass_gateway_sensor_entity }}' {{ '%}' }}
+      {% raw -%}
+      {% set key_name = 'tx_bytes-r' %}
+      {% if states(sensor_id) %}
+        {% set val = state_attr(sensor_id, key_name) %}
+        {% if val is not none %}
+          {{ val | int }}
+        {% else %}
+          {{ val }}
+        {% endif %}
+      {% endif %}
+      {%- endraw %}

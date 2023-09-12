@@ -1,0 +1,41 @@
+---
+
+# Scenes
+
+- name: Add ConfCallON scene
+  ansible.builtin.template:
+    src: scenes/conf_call_on.yml
+    dest: "{{ hass_scenes_path }}/conf_call_on.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh scenes.yaml
+
+- name: Add ConfCallOFF scene
+  ansible.builtin.template:
+    src: scenes/conf_call_off.yml
+    dest: "{{ hass_scenes_path }}/conf_call_off.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh scenes.yaml
+
+# Automations
+
+- name: Add Conf call on automation
+  ansible.builtin.template:
+    src: automations/conf_call_on.yml
+    dest: "{{ hass_a8n_config_path }}/conf_call_on.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh automation.yaml
+
+- name: Add Conf call off automation
+  ansible.builtin.template:
+    src: automations/conf_call_off.yml
+    dest: "{{ hass_a8n_config_path }}/conf_call_off.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh automation.yaml

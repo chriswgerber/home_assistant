@@ -1,0 +1,61 @@
+alias: Shutdown Everything
+mode: single
+sequence:
+
+  - service: notify.mobile_app_gjallarhorn
+    data:
+      data:
+        tag: shutdown-everything-tag-1
+      title: Shutdown Everything
+      message: |
+        Lights:
+          [{{ states('light.living_room_table_lamp') }}] Living Room | [{{ states('light.anna_s_bedroom_light') }}] Anna's Room | [{{ states('light.office_light') }}] Office | [{{ states('light.game_room_light') }}] Game Room | [{{ states('light.master_bedroom') }}] Master Bedroom
+        Garages:
+          [{{ states('cover.attached_garage') }}] Attached Garage | [{{ states('cover.shop_garage') }}] Shop Garage
+        Media Player:
+          [{{ states('media_player.game_room_tv') }}] Game Room | [{{ states('media_player.series_x') }}] Xbox | [{{ states('media_player.living_room_tv') }}] Living Room TV
+
+  # Turn off lights
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id:
+        - light.master_bedroom
+        - light.living_room_table_lamp
+        - light.game_room_light
+        - light.anna_s_bedroom_light
+        - light.office_light
+
+  # Close Attached Garage
+  - if:
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: cover.attached_garage
+            state: closed
+    then:
+      - device_id: e4084f943cae9c7c3d71413eeb239d04
+        domain: cover
+        entity_id: aeef9df2b596e54b84e8b818cea05779
+        type: close
+  # Close Shop Garage
+  - if:
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: cover.shop_garage
+            state: closed
+    then:
+      - device_id: 973aa67912e08693e75d1ea3737a85ed
+        domain: cover
+        entity_id: 870c3980cc386a42709b1c6cf98df3a6
+        type: close
+
+  # Turn off TVs
+  - service: media_player.turn_off
+    data: {}
+    target:
+      entity_id:
+        - media_player.game_room_tv
+        - media_player.series_x
+        - media_player.living_room_tv

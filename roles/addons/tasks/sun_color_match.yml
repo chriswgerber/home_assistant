@@ -1,0 +1,28 @@
+---
+
+- name: Create HarvsG blueprints dir
+  ansible.builtin.file:
+    path: "{{ hass_blueprints_path ~ '/automation/' ~ hass_blueprints.sun_color_match.gist_org }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  register: harvsg_gist_dir
+
+- name: Download HarvsG/match-color-temp-kelvin.yaml blueprint
+  ansible.builtin.get_url:
+    url: "{{ hass_blueprints.sun_color_match.source_url }}"
+    dest: "{{ harvsg_gist_dir.path ~ '/' ~ hass_blueprints.sun_color_match.gist_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart home assistant
+
+- name: Add Office color temp automation
+  ansible.builtin.template:
+    src: automations/match_color_temp.yml
+    dest: "{{ hass_a8n_config_path }}/match_color_temp.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh automation.yaml

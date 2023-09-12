@@ -1,0 +1,19 @@
+---
+
+- name: Add System Monitor Sensor
+  ansible.builtin.template:
+    src: sensors/sysmon.yml.j2
+    dest: "{{ hass_sensors_path }}/sysmon.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh sensors.yaml
+
+- name: Add Pihole Monitor Sensor
+  ansible.builtin.template:
+    src: sensors/pi_monitor.yml
+    dest: "{{ hass_restful_path }}/pi_monitor.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh restful.yaml

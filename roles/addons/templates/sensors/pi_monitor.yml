@@ -1,0 +1,102 @@
+{{ ansible_managed | comment }}
+
+- scan_interval: 30
+  resource: http://{{ pihole_address }}:8088/monitor.json
+  verify_ssl: false
+  sensor:
+{% raw %}
+    - unique_id: pihole_uptime
+      name: PiHole Uptime
+      value_template: "{{ value_json.uptime | round(2) }}"
+      device_class: duration
+      unit_of_measurement: s
+      state_class: total_increasing
+
+    - unique_id: pihole_last_restart
+      name: PiHole Uptime
+      value_template: >
+        {{ now() - timedelta(seconds=(value_json.uptime | int)) }}
+      device_class: timestamp
+
+    - unique_id: pihole_cpu_temperature
+      name: PiHole CPU Temperature
+      value_template: "{{ value_json.soc_temperature | float }}"
+      device_class: temperature
+      unit_of_measurement: '°C'
+      state_class: measurement
+
+    - unique_id: pihole_cpu_load_1m
+      name: PiHole CPU Load (1m)
+      value_template: "{{ value_json.load_average.0 | float }}"
+      unit_of_measurement: '%'
+      state_class: measurement
+
+    - unique_id: pihole_cpu_load_5m
+      name: PiHole CPU Load (5m)
+      value_template: "{{ value_json.load_average.1 | float }}"
+      unit_of_measurement: '%'
+      state_class: measurement
+
+    - unique_id: pihole_cpu_load_15m
+      name: PiHole CPU Load (15m)
+      value_template: "{{ value_json.load_average.2 | float }}"
+      unit_of_measurement: '%'
+      state_class: measurement
+
+    - unique_id: pihole_memory_used
+      name: PiHole Memory Used
+      value_template: >
+        {% set memtotal = value_json.memory.total_memory %}
+        {% set memfree = value_json.memory.free_memory %}
+        {{ (((memtotal - memfree) / memtotal) | round(4)) * 100 }}
+      unit_of_measurement: '%'
+      state_class: measurement
+
+    - unique_id: pihole_memory_total
+      name: PiHole Memory (Total)
+      value_template: "{{ (value_json.memory.total_memory / 1000) | round(2) }}"
+      device_class: data_size
+      unit_of_measurement: MB
+      state_class: total
+
+    - unique_id: pihole_memory_free
+      name: PiHole Memory (Free)
+      value_template: "{{ (value_json.memory.free_memory / 1000) | round(2) }}"
+      device_class: data_size
+      unit_of_measurement: MB
+      state_class: measurement
+
+    - unique_id: pihole_memory_available
+      name: PiHole Memory (Available)
+      value_template: "{{ (value_json.memory.available_memory / 1000) | round(2) }}"
+      device_class: data_size
+      unit_of_measurement: MB
+      state_class: measurement
+
+    - unique_id: pihole_disk_total
+      name: PiHole Disk (Total)
+      value_template: "{{ value_json.disk.1.size | int }}"
+      device_class: data_size
+      unit_of_measurement: MB
+      state_class: total
+
+    - unique_id: pihole_disk_used
+      name: PiHole Disk (Used)
+      value_template: "{{ value_json.disk.1.used | int }}"
+      device_class: data_size
+      unit_of_measurement: MB
+      state_class: measurement
+
+    - unique_id: pihole_disk_available
+      name: PiHole Disk (Available)
+      value_template: "{{ value_json.disk.1.available | int }}"
+      device_class: data_size
+      unit_of_measurement: MB
+      state_class: measurement
+
+    - unique_id: pihole_disk_utilized
+      name: PiHole Disk (Utilized)
+      value_template: "{{ value_json.disk.1.utilized | int }}"
+      unit_of_measurement: '%'
+      state_class: measurement
+{% endraw %}

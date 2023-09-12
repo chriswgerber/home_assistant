@@ -1,0 +1,9 @@
+{{ ansible_managed | comment }}
+
+- sensor:
+  - unique_id: xcel_current_rate
+    name: Xcel Current Rate (USD/kWh)
+    device_class: monetary
+    unit_of_measurement: "$/kWh"
+    state: >
+      {{ '{{' }} states('{{ hass_xcel_rate_input_entity }}') | float {{ '}}' }}

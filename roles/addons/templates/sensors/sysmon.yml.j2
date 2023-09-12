@@ -1,0 +1,7 @@
+{{ ansible_managed | comment }}
+
+- platform: systemmonitor
+  resources:
+{% for metric in hass_systemmonitor_metrics %}
+    - type: {{ metric }}
+{% endfor %}

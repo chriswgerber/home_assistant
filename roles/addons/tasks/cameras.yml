@@ -1,0 +1,19 @@
+---
+
+- name: Add Wyze Cameras
+  ansible.builtin.template:
+    src: file.yaml.j2
+    dest: "{{ hass_cameras_path }}/wyze-cam.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh cameras.yaml
+  vars:
+    yamldata: |
+      - platform: ffmpeg
+        name: Driveway Cam
+        input: rtsp://home.chriswgerber.com:8554/driveway-cam
+
+      - platform: ffmpeg
+        name: Shop Cam
+        input: rtsp://home.chriswgerber.com:8554/shop-cam

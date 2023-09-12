@@ -1,0 +1,10 @@
+---
+
+- name: Adds iPad Location automation
+  ansible.builtin.template:
+    src: automations/ipad_location.yml
+    dest: "{{ hass_a8n_config_path }}/ipad_location.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: refresh automation.yaml

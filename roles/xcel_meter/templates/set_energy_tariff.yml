@@ -1,0 +1,29 @@
+{{ ansible_managed | comment }}
+
+- alias: Adjust Current Energy USD/kWh
+  id: '1693331477990'
+  mode: single
+  description: >-
+    Adjust the current cost in USD per kWh of energy according to the schedule set by
+    Xcel Energy. Right now, will check daily at midnight to see if it should be
+    changed.
+  trigger:
+    - platform: time_pattern
+      hours: '0'
+      minutes: '0'
+      seconds: '15'
+  condition: []
+  action:
+    - if:
+      - condition: template
+        value_template: "{{ '{{ now().month >=6 and now().month < 10 }}' }}"
+      then:
+        - service: input_text.set_value
+          data:
+            value: "{{ xcel_energy_price_summer }}"
+          target:
+            entity_id: input_text.xcel_current_rate_usd_kwh
+      else:
+        - service: input_text.set_value
+          data:
+            value: "{{ xcel_energy_price_winter }}"

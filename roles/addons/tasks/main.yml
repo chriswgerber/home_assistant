@@ -1,0 +1,41 @@
+---
+
+- name: Add Cameras
+  ansible.builtin.import_tasks:
+    file: cameras.yml
+  become: true
+
+- name: Add Unifi sensor configuration
+  ansible.builtin.import_tasks:
+    file: unifi.yml
+  become: true
+
+- name: Add SNMP Automations
+  ansible.builtin.import_tasks:
+    file: snmp.yml
+  become: true
+
+- name: Add Color Temp Automations
+  ansible.builtin.import_tasks:
+    file: sun_color_match.yml
+  become: true
+
+- name: Add Pi-Hole Automations
+  ansible.builtin.import_tasks:
+    file: pi_hole.yml
+  become: true
+
+- name: Add Conference Call Automations
+  ansible.builtin.import_tasks:
+    file: conf_call.yml
+  become: true
+
+- name: Add Location Automations
+  ansible.builtin.import_tasks:
+    file: location.yml
+  become: true
+
+- name: Add System Monitors
+  ansible.builtin.import_tasks:
+    file: sysmon.yml
+  become: true

@@ -1,0 +1,31 @@
+---
+
+# Pihole
+pihole_address: ""
+hass_pihole_disable_timeout: 10
+
+# Unifi
+unifi_controller_ip: ""
+
+hass_gateway_sensor_entity: ""
+hass_usg_gateway_entity: ""
+
+# Blueprints
+hass_blueprints:
+  sun_color_match:
+    source_url: https://gist.githubusercontent.com/HarvsG/cc86381dc99169159d6d4cd870c36e46/raw/9b305a6e2f132564914168e15eb38f694f13f0f6/match-color-temp-kelvin.yaml
+    gist_org: HarvsG
+    gist_file: match-color-temp-kelvin.yaml
+    target_light: light.office_light
+
+hass_systemmonitor_metrics:
+  - disk_use_percent
+  - memory_use_percent
+  - memory_use
+  - load_1m
+  - load_5m
+  - load_15m
+  - swap_use_percent
+  - processor_use
+  - processor_temperature
+  - last_boot

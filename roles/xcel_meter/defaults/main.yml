@@ -1,0 +1,21 @@
+---
+
+xcel_meter_ssl:
+  cert: "{{ hass_certs_dir }}/xcel-meter.crt"
+  key: "{{ hass_certs_dir }}/xcel-meter.key"
+  conf: "{{ hass_certs_dir }}/xcel-meter-ssl.conf"
+
+hass_xcel_meter_cert:
+  validatidy_in_days: 1094
+  common_name: XceliTronMeter
+
+xcel_energy_price_summer: '0.103010'
+xcel_energy_price_winter: '0.08803'
+
+hass_xcel_rate_input_entity: ""
+
+hass_xcel_meter_key_data: ""
+hass_xcel_meter_cert_data: ""
+
+# Print certificate LDFI. Requires cryptography>=1.6 on the ansible target
+hass_xcel_print_lfdi: false

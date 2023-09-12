@@ -1,0 +1,22 @@
+{{ ansible_managed | comment }}
+
+- alias: Every {{ hass_pihole_disable_timeout }} minutes, turn on PiHole if off
+  id: '1693284383066'
+  mode: single
+  description: >-
+    Every {{ hass_pihole_disable_timeout }} minutes, checks to see if Pi.Hole is
+    turned off. If it's off, it turns it back on.
+  trigger:
+    - platform: time_pattern
+      minutes: /{{ hass_pihole_disable_timeout }}
+  condition:
+    - condition: device
+      type: is_off
+      device_id: cddcf057cd5b6e4907ca63e7981df886
+      entity_id: 20ad4f71e3bdcf131691a9902bfb8a2f
+      domain: switch
+  action:
+    - type: turn_on
+      device_id: cddcf057cd5b6e4907ca63e7981df886
+      entity_id: 20ad4f71e3bdcf131691a9902bfb8a2f
+      domain: switch
