@@ -13,4 +13,4 @@ galaxy_info:
       - all
 
 dependencies:
-  - role: chriswgerber.hass_handlers
+  - role: hass_handlers
