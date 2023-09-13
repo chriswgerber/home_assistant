@@ -1,1 +1,3 @@
 ---
+# Don't set. Will be updated by run
+hass_config_is_valid: false
