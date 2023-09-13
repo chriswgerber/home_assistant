@@ -36,7 +36,7 @@ hass_xcel_meter_cert_data: ""
 Dependencies
 ------------
 
-- Role: chriswgerber.home_assistant.configuration
+- Role: chriswgerber.home_assistant.core
 
 Specified as dependency in `meta/main.yml`
 

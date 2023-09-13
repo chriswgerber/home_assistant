@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - role: chriswgerber.home_assistant.configuration
+  - role: chriswgerber.home_assistant.core
 
 galaxy_info:
   author: chriswgerber
