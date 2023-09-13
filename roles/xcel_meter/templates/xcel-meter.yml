@@ -29,6 +29,6 @@
   unit_of_measurement: kWh
   value_template: "{{ '{{ float(value) | multiply(0.001) | round(3) if is_number(value) }}' }}"
   device_class: energy
-  state_class: total_increasing
+  state_class: total
   scan_interval: 60
   command_timeout: 10

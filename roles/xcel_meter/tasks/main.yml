@@ -38,7 +38,7 @@
     mode: '0644'
   become: true
 
-- name: Add Xcel Rate Automation
+- name: Add Xcel Energy price rate converter
   ansible.builtin.template:
     src: xcel_usd_kwh.yml
     dest: "{{ hass_templates_path }}/xcel_usd_kwh.yaml"
@@ -48,7 +48,7 @@
   notify: refresh templates.yaml
   become: true
 
-- name: Set Energy Tariff Price
+- name: Add automation to set energy price
   ansible.builtin.template:
     src: set_energy_tariff.yml
     dest: "{{ hass_a8n_config_path }}/set_energy_tariff.yaml"
@@ -58,12 +58,42 @@
   notify: refresh automation.yaml
   become: true
 
-- name: Add Xcel Meter sensors
-  ansible.builtin.template:
-    src: xcel-meter.yml
-    dest: "{{ hass_sensors_path }}/xcel-meter.yaml"
-    owner: root
-    group: root
-    mode: '0644'
-  notify: refresh sensors.yaml
-  become: true
+# Use New sensors
+- when: hass_xcel_use_new_sensors | bool
+  block:
+    - name: Add Xcel Meter sensors (v2)
+      ansible.builtin.template:
+        src: xcel_meter_sensors.yml.j2
+        dest: "{{ hass_cmdline_path }}/xcel_meter_sensors.yaml"
+        owner: root
+        group: root
+        mode: '0644'
+      notify: refresh command_line.yaml
+      become: true
+
+    - name: Delete old Xcel Meter Sensor (v2)
+      ansible.builtin.file:
+        path: "{{ hass_sensors_path }}/xcel-meter.yaml"
+        state: absent
+      notify: refresh sensors.yaml
+      become: true
+
+# Use previous sensors
+- when: not hass_xcel_use_new_sensors | bool
+  block:
+    - name: Add Xcel Meter sensors (v1)
+      ansible.builtin.template:
+        src: xcel-meter.yml
+        dest: "{{ hass_sensors_path }}/xcel-meter.yaml"
+        owner: root
+        group: root
+        mode: '0644'
+      notify: refresh sensors.yaml
+      become: true
+
+    - name: Delete new Xcel Meter Sensor (v1)
+      ansible.builtin.template:
+        path: "{{ hass_cmdline_path }}/xcel_meter_sensors.yaml"
+        state: absent
+      notify: refresh command_line.yaml
+      become: true

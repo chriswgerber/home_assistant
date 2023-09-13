@@ -1,0 +1,35 @@
+{{ ansible_managed | comment }}
+
+- sensor:
+    name: Xcel Meter Power
+    unique_id: xcel_meter_power
+    command: |
+      export OPENSSL_CONF="{{ xcel_meter_ssl.conf }}"; \
+      result=$(/usr/bin/curl --insecure \
+          --cert {{ xcel_meter_ssl.cert }}  \
+          --key {{ xcel_meter_ssl.key }} \
+          --url https://{{ xcel_meter_ip }}:{{ xcel_meter_port }}/upt/1/mr/1/r 2>&1);
+      echo $result | grep -o "<value>.*</value>" | grep -Eo "[0-9]+"
+    value_template: "{{ '{{ float(value) if is_number(value_json) }}' }}"
+    device_class: power
+    unit_of_measurement: W
+    state_class: measurement
+    scan_interval: {{ hass_xcel_meter_query.demand.interval }}
+    command_timeout: {{ hass_xcel_meter_query.demand.timeout }}
+
+- sensor:
+  name: Xcel Meter Consumption
+  unique_id: xcel_meter_consumption
+  command: |
+    export OPENSSL_CONF="{{ xcel_meter_ssl.conf }}"; \
+    result=$(/usr/bin/curl --insecure \
+        --cert {{ xcel_meter_ssl.cert }}  \
+        --key {{ xcel_meter_ssl.key }} \
+        --url https://{{ xcel_meter_ip }}:{{ xcel_meter_port }}/upt/1/mr/3/r 2>&1);
+    echo $result | grep -o '<value>.*</value>' | grep -Eo '[0-9]+';
+  value_template: "{{ '{{ float(value) | multiply(0.001) | round(3) if is_number(value) }}' }}"
+  device_class: energy
+  unit_of_measurement: kWh
+  state_class: total
+  scan_interval: {{ hass_xcel_meter_query.consumption.interval }}
+  command_timeout: {{ hass_xcel_meter_query.consumption.timeout }}

@@ -3,10 +3,14 @@ galaxy_info:
   author: chriswgerber
   description: Configuration management for Home Assistant
   min_ansible_version: "2.4"
+  license: None
   platforms:
-  - name: Debian
-    versions:
-    - all
-  - name: Ubuntu
-    versions:
-    - all
+    - name: Debian
+      versions:
+      - all
+    - name: Ubuntu
+      versions:
+      - all
+
+dependencies:
+  - role: chriswgerber.hass_handlers

@@ -10,6 +10,7 @@
   loop:
     - "{{ hass_a8n_config_path }}"
     - "{{ hass_cameras_path }}"
+    - "{{ hass_cmdline_path }}"
     - "{{ hass_trackers_path }}"
     - "{{ hass_restful_path }}"
     - "{{ hass_scenes_path }}"

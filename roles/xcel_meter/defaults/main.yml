@@ -19,3 +19,16 @@ hass_xcel_meter_cert_data: ""
 
 # Print certificate LDFI. Requires cryptography>=1.6 on the ansible target
 hass_xcel_print_lfdi: false
+
+# Set to true to update config to use command_line sensors instead of template sensors.
+# Old sensors will be deprecated by Home Assistant in the future.
+hass_xcel_use_new_sensors: false
+
+# Configuration for Command line operator.
+hass_xcel_meter_query:
+  demand:
+    interval: 30
+    timeout: 10
+  consumption:
+    interval: 60
+    timeout: 10

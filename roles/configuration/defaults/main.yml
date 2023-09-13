@@ -1,5 +1,10 @@
 ---
 
+hass_url: ""
+hass_cli_key: ""
+
+hass_handler_command_host: 127.0.0.1
+
 # Configuration File
 hass_config_dir: /config
 hass_config_filename: "{{ hass_config_dir  }}/configuration.yaml"
@@ -17,6 +22,11 @@ hass_a8n_config_file: "{{ hass_a8n_config_path }}.yaml"
 hass_cameras_name: cameras
 hass_cameras_path: "{{ hass_config_dir ~ '/' ~ hass_cameras_name }}"
 hass_cameras_file: "{{ hass_cameras_path }}.yaml"
+
+# Command Line
+hass_cmdline_name: command_line
+hass_cmdline_path: "{{ hass_config_dir ~ '/' ~ hass_cmdline_name }}"
+hass_cmdline_file: "{{ hass_cmdline_path }}.yaml"
 
 # Restful Sensors
 hass_restful_name: rest
