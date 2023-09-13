@@ -17,6 +17,12 @@
     - "{{ hass_sensors_path }}"
     - "{{ hass_templates_path }}"
 
+# Merges every variable (list variable) that begins with 'hass_yaml_config_'
+- name: Update _hass_yaml_config_all list
+  ansible.builtin.set_fact:
+    _hass_yaml_config_all: "{{ _hass_yaml_config_all | ansible.builtin.combine(lookup('ansible.builtin.vars', item)) }}"
+  loop: "{{ lookup('ansible.builtin.varnames', '^hass_yaml_config_.+', wantlist=true) }}"
+
 - name: Create configuration.yaml
   ansible.builtin.template:
     src: configuration.yaml.j2
@@ -42,3 +48,5 @@
     mode: '0644'
   become: true
   notify: restart home assistant
+
+ffmpeg:

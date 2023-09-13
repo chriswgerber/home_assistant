@@ -6,24 +6,12 @@ default_config:
 frontend:
   themes: !include_dir_merge_named {{ hass_themes_dirname }}
 
-automation: !include {{ hass_a8n_config_file }}
+# ------
+# Custom
 
-camera: !include {{ hass_cameras_file }}
-
-command_line: !include {{ hass_cmdline_file }}
-
-device_tracker: !include {{ hass_trackers_file }}
-
-rest: !include {{ hass_restful_file }}
-
-scene: !include {{ hass_scenes_file }}
-
-script: !include_dir_merge_named {{ hass_scripts_path }}
-
-sensor: !include {{ hass_sensors_file }}
-
-template: !include {{ hass_templates_file }}
-
-###
-# Other
-ffmpeg:
+{% for item in (_hass_yaml_config_all | dict2items) %}
+{% set k = item.key %}
+{% set v = item.value %}
+{{ k }}:{% if v is not none %}{% if 'type' in v %} !{{ v.type }}{% endif %}{% if 'target' in v %} {{'{{'}} {{ v.target }} {{'}}'}}
+{% endif %}{% endif %}
+{% endfor %}

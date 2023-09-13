@@ -29,3 +29,6 @@ hass_systemmonitor_metrics:
   - processor_use
   - processor_temperature
   - last_boot
+
+hass_yaml_config_addons:
+  ffmpeg:

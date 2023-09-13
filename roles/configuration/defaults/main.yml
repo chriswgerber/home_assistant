@@ -74,3 +74,35 @@ hass_secrets_data_base:
   - key: some_password
     value: welcome
     comment: https://www.home-assistant.io/docs/configuration/secrets/
+
+# Do not use
+_hass_yaml_config_all: []
+
+hass_yaml_config_base:
+  automation:
+    type: include
+    target: hass_a8n_config_file
+  camera:
+    type: include
+    target: hass_cameras_file
+  command_line:
+    type: include
+    target: hass_cmdline_file
+  device_tracker:
+    type: include
+    target: hass_trackers_file
+  rest:
+    type: include
+    target: hass_restful_file
+  scene:
+    type: include
+    target: hass_scenes_file
+  script:
+    type: include_dir_merge_named
+    target: hass_scripts_path
+  sensor:
+    type: include
+    target: hass_sensors_file
+  template:
+    type: include
+    target: hass_templates_file
