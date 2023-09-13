@@ -92,7 +92,7 @@
       become: true
 
     - name: Delete new Xcel Meter Sensor (v1)
-      ansible.builtin.template:
+      ansible.builtin.file:
         path: "{{ hass_cmdline_path }}/xcel_meter_sensors.yaml"
         state: absent
       notify: refresh command_line.yaml
