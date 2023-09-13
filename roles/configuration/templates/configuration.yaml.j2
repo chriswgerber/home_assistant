@@ -12,6 +12,6 @@ frontend:
 {% for item in (_hass_yaml_config_all | dict2items) %}
 {% set k = item.key %}
 {% set v = item.value %}
-{{ k }}:{% if v is not none %}{% if 'type' in v %} !{{ v.type }}{% endif %}{% if 'target' in v %} {{'{{'}} {{ v.target }} {{'}}'}}
+{{ k }}:{% if v is not none %}{% if 'type' in v %} !{{ v.type }}{% endif %}{% if 'target' in v %} {{ v.target }}
 {% endif %}{% endif %}
 {% endfor %}
