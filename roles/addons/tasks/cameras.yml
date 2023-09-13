@@ -12,8 +12,8 @@
     yamldata: |
       - platform: ffmpeg
         name: Driveway Cam
-        input: rtsp://home.chriswgerber.com:8554/driveway-cam
+        input: rtsp://{{ hass_url_domain }}:8554/driveway-cam
 
       - platform: ffmpeg
         name: Shop Cam
-        input: rtsp://home.chriswgerber.com:8554/shop-cam
+        input: rtsp://{{ hass_url_domain }}:8554/shop-cam

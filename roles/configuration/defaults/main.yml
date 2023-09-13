@@ -1,6 +1,11 @@
 ---
 
-hass_url: ""
+hass_url_domain:
+hass_url_scheme: http
+hass_port: "8123"
+
+hass_url: "{{ hass_url_scheme ~ '://' ~ hass_url ~ ':' ~ hass_port }}"
+
 hass_cli_key: ""
 
 hass_handler_command_host: 127.0.0.1
