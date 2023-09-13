@@ -111,7 +111,7 @@
 
 - name: Set Config Check body
   ansible.builtin.set_fact:
-    hass_config_check: {{ hass_config_resp.content | from_yaml }}
+    hass_config_check: "{{ hass_config_resp.content | from_yaml }}"
 
 - name: Set Config vars
   ansible.builtin.set_fact:
